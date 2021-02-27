@@ -32,11 +32,6 @@ services:
     environment: 
       HOST: 0.0.0.0
       MONGODB_HOST: database
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
 
   database:
     image: bitnami/mongodb:latest
