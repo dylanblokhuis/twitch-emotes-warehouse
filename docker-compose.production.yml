@@ -32,6 +32,7 @@ services:
     environment: 
       HOST: 0.0.0.0
       MONGODB_HOST: database
+    restart: always
 
   database:
     image: bitnami/mongodb:latest
