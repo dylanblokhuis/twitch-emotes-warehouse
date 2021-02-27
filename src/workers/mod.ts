@@ -1,6 +1,51 @@
-import { bttvCollection, ffzCollection } from "../db/mongo.ts";
+import {
+  bttvCollection,
+  ffzCollection,
+  globalCollection,
+} from "../db/mongo.ts";
 import { clearCache } from "../routers/emotes.ts";
-import type { BttvRequest, FfzRequest } from "../types.ts";
+import type { BttvRequest, FfzRequest, GlobalRequest } from "../types.ts";
+
+export function startGlobalWorker() {
+  console.log("Starting Global Worker");
+
+  const worker = new Worker(
+    new URL(`./global.ts`, import.meta.url).href,
+    {
+      type: "module",
+    },
+  );
+
+  worker.onmessage = async (
+    { data }: { data: GlobalRequest },
+  ) => {
+    try {
+      const { matchedCount } = await globalCollection
+        .updateOne(
+          {
+            platform: {
+              $eq: data.platform,
+            },
+          },
+          {
+            $set: { emotes: data.emotes },
+          },
+        );
+
+      // if doesnt exist, create it.
+      if (matchedCount === 0) {
+        await globalCollection.insert({
+          platform: data.platform,
+          emotes: data.emotes,
+        });
+      }
+
+      clearCache();
+    } catch (e) {
+      console.log("assertion error probably", e.message);
+    }
+  };
+}
 
 export function startBttvWorker(offset = 0) {
   console.log("Starting BTTV Worker");

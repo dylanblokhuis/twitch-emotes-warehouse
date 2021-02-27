@@ -1,8 +1,13 @@
 import { oak } from "../deps.ts";
 import emotesRouter from "./routers/emotes.ts";
 import errorHandler from "./error.ts";
-import { startBttvWorker, startFfzWorker } from "./workers/mod.ts";
+import {
+  startBttvWorker,
+  startFfzWorker,
+  startGlobalWorker,
+} from "./workers/mod.ts";
 
+startGlobalWorker();
 startBttvWorker();
 startFfzWorker();
 

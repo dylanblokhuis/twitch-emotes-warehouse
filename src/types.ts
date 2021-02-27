@@ -1,3 +1,14 @@
+export interface TwitchResponse {
+  emoticon_sets: {
+    [key: string]: TwitchEmote;
+  };
+}
+
+export interface TwitchEmote {
+  id: number;
+  code: string;
+}
+
 export interface BttvResponse {
   emote: BttvEmote;
   total: number;
@@ -35,7 +46,12 @@ export interface Emote {
   platform: Platform;
 }
 
-export type Platform = "bttv" | "ffz";
+export type Platform = "bttv" | "ffz" | "twitch";
+
+export interface GlobalRequest {
+  platform: Platform;
+  emotes: Emote[];
+}
 
 export interface BttvRequest {
   offset: number;
