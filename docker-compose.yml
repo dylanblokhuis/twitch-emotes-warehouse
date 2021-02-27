@@ -1,0 +1,26 @@
+version: '3'
+
+volumes:
+  mongodb_data:
+    driver: local
+
+services:
+  app:
+    build: .
+    command: ["denon", "run", "-A", "src/app.ts"]
+    ports:
+      - 3000:3000
+    volumes: 
+      - .:/app/
+    depends_on: 
+      - database
+    environment: 
+      HOST: 0.0.0.0
+      MONGODB_HOST: database
+
+  database:
+    image: bitnami/mongodb:latest
+    volumes:
+      - 'mongodb_data:/bitnami/mongodb'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
