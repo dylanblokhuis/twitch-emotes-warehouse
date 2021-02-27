@@ -1,0 +1,25 @@
+version: '3'
+
+volumes:
+  mongodb_data:
+    driver: local
+
+services:
+  app:
+    build: .
+    ports:
+      - 80:3000
+    volumes: 
+      - .:/app/
+    depends_on: 
+      - database
+    environment: 
+      HOST: 0.0.0.0
+      MONGODB_HOST: database
+
+  database:
+    image: bitnami/mongodb:latest
+    volumes:
+      - 'mongodb_data:/bitnami/mongodb'
+    environment:
+      - ALLOW_EMPTY_PASSWORD=yes
