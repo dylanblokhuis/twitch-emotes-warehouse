@@ -41,4 +41,4 @@ jobs:
           USERNAME: ${{ secrets.USERNAME }}
           PORT: ${{ secrets.PORT }}
           KEY: ${{ secrets.SSHKEY }}
-          script: docker-compose -f docker-compose.production.yml up -d
+          script: cd ~/twitch-emotes-warehouse && docker-compose -f docker-compose.production.yml up -d
