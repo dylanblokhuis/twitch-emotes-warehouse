@@ -7,7 +7,7 @@ volumes:
 services:
   app:
     build: .
-    command: ["denon", "run", "-A", "src/app.ts"]
+    command: ["denon", "run", "--allow-env", "--allow-net", "--allow-read", "src/app.ts"]
     ports:
       - 3000:3000
     volumes: 

@@ -11,4 +11,4 @@ RUN deno cache src/workers/*.ts
 
 EXPOSE 3000
 
-CMD ["deno", "run", "-A", "src/app.ts"]
+CMD ["deno", "run", "--allow-env", "--allow-net", "--allow-read", "src/app.ts"]
