@@ -7,12 +7,6 @@ export default async function fetcher(
   const url =
     `https://api.betterttv.net/3/emotes/shared/top?offset=${offset}&limit=${limit}`;
 
-  // const cacheResult = await cache.get(url);
-  // if (cacheResult) {
-  //   console.log("[CACHE]: Fetching from bttv", url);
-  //   return JSON.parse(cacheResult);
-  // }
-
   console.log("Fetching from bttv", url);
 
   try {
@@ -26,9 +20,7 @@ export default async function fetcher(
     );
 
     if (response.ok) {
-      const data = await response.json();
-      // cache.set(url, data);
-      return data;
+      return await response.json();
     } else {
       throw new Error(response.statusText);
     }
