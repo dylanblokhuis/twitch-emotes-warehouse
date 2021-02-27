@@ -15,6 +15,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      
   certbot:
     image: certbot/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
