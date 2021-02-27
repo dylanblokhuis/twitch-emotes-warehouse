@@ -1,8 +1,8 @@
 name: Publish Docker Image
 on: push
 jobs:
-  push_to_registry:
-    name: Push Docker image to Github Registry
+  push_to_ghcr:
+    name: Push Docker image to GHCR.io
     runs-on: ubuntu-latest
     steps:
       - name: Check out the repo
@@ -19,3 +19,21 @@ jobs:
       - name: Docker Push
         run: |
           docker push ghcr.io/dylanblokhuis/twitch-emotes-warehouse/app:latest
+  push_to_github:
+    name: Push Docker image to Github Registry
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Docker Login
+        env:
+          DOCKER_USER: ${{ secrets.DOCKER_USER }}
+          DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        run: |
+          docker login https://docker.pkg.github.com -u $DOCKER_USER -p $DOCKER_PASSWORD
+      - name: Docker Build
+        run: |
+          docker build -t docker.pkg.github.com/dylanblokhuis/twitch-emotes-warehouse/app:latest .
+      - name: Docker Push
+        run: |
+          docker push docker.pkg.github.com/dylanblokhuis/twitch-emotes-warehouse/app:latest
