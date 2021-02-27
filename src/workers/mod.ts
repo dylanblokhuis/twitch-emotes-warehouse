@@ -15,27 +15,31 @@ export function startBttvWorker(offset = 0) {
   worker.onmessage = async (
     { data }: { data: BttvRequest },
   ) => {
-    const { matchedCount } = await bttvCollection
-      .updateOne(
-        {
-          offset: {
-            $eq: data.offset,
+    try {
+      const { matchedCount } = await bttvCollection
+        .updateOne(
+          {
+            offset: {
+              $eq: data.offset,
+            },
           },
-        },
-        {
-          $set: { emotes: data.emotes },
-        },
-      );
+          {
+            $set: { emotes: data.emotes },
+          },
+        );
 
-    // if doesnt exist, create it.
-    if (matchedCount === 0) {
-      await bttvCollection.insert({
-        offset: data.offset,
-        emotes: data.emotes,
-      });
+      // if doesnt exist, create it.
+      if (matchedCount === 0) {
+        await bttvCollection.insert({
+          offset: data.offset,
+          emotes: data.emotes,
+        });
+      }
+
+      clearCache();
+    } catch (e) {
+      console.log("assertion error probably", e.message);
     }
-
-    clearCache();
   };
 }
 
@@ -52,26 +56,30 @@ export function startFfzWorker(page = 1) {
   worker.onmessage = async (
     { data }: { data: FfzRequest },
   ) => {
-    const { matchedCount } = await ffzCollection
-      .updateOne(
-        {
-          page: {
-            $eq: data.page,
+    try {
+      const { matchedCount } = await ffzCollection
+        .updateOne(
+          {
+            page: {
+              $eq: data.page,
+            },
           },
-        },
-        {
-          $set: { emotes: data.emotes },
-        },
-      );
+          {
+            $set: { emotes: data.emotes },
+          },
+        );
 
-    // if doesnt exist, create it.
-    if (matchedCount === 0) {
-      await ffzCollection.insert({
-        page: data.page,
-        emotes: data.emotes,
-      });
+      // if doesnt exist, create it.
+      if (matchedCount === 0) {
+        await ffzCollection.insert({
+          page: data.page,
+          emotes: data.emotes,
+        });
+      }
+
+      clearCache();
+    } catch (e) {
+      console.log("assertion error probably", e.message);
     }
-
-    clearCache();
   };
 }
